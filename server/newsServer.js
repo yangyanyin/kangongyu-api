@@ -62,6 +62,7 @@ module.exports.newsDelete = (params) => {
   })
 }
 
+// 新闻详情
 module.exports.getNewsDetail = (params) => {
   return new Promise((resolve, reject) => {
     const id = params.id

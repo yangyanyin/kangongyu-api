@@ -5,6 +5,8 @@ const newsController = require('../controllers/newsController')
 const commonController = require('../controllers/commonController')
 const trafficController = require('../controllers/trafficController')
 const facilitiesController = require('../controllers/facilitiesController')
+const housesController = require('../controllers/housesController')
+const estateController = require('../controllers/estateController')
 
 function area (req, res, next) {
   res.header("Access-Control-Allow-Origin", req.headers.origin); //需要显示设置来源
@@ -16,8 +18,11 @@ function area (req, res, next) {
   next()
 }
 
-
+// 上传图片
 router.post('/upload-image', area, commonController.uploadImage)
+
+// 获取筛选向
+router.get('/filter', commonController.filter)
 
 // 新闻分类
 router.get('/news/category', newsController.newsCategory)
@@ -37,7 +42,7 @@ router.get('/news/detail', newsController.newsDetail)
 // 编辑新闻
 router.post('/news/edit', newsController.newsEdit)
 
-// 是否推荐
+// 新闻推荐
 router.post('/news/recommend', newsController.newsRecommend)
 
 // 交通信息
@@ -76,6 +81,38 @@ router.post('/convenient-facility/edit', facilitiesController.convenientFacility
 // 删除便利设施
 router.post('/convenient-facility/delete', facilitiesController.convenientFacilityDelete)
 
+// 添加房屋信息
+router.post('/houses/add', housesController.housesAdd)
+
+// 获取房屋详情
+router.get('/houses/detail', housesController.housesDetail)
+
+// 获取房屋列表
+router.get('/houses/list', housesController.housesList)
+
+// 是否推荐
+router.post('/houses/recommend', housesController.housesRecommend)
+
+// 删除房屋
+router.post('/houses/delete', housesController.housesDelete)
+
+// 编辑房屋信息
+router.post('/houses/edit', housesController.housesEdit)
+
+// 添加商业地产
+router.post('/estate/add', estateController.estateAdd)
+
+// 获取地产列表
+router.get('/estate/list', estateController.estateList)
+
+// 删除地产
+router.post('/estate/delete', estateController.estateDelete)
+
+// 获取地产详情
+router.get('/estate/detail', estateController.estateDetail)
+
+// 获取地产详情
+router.post('/estate/edit', estateController.estateEdit)
 
 
 module.exports = router

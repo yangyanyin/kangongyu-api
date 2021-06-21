@@ -4,6 +4,13 @@ var bodyParser = require('body-parser')
 var router = require('./routes/index')
 var app = express();
 const path = require('path')
+const fs = require('fs')
+process.env.TZ = 'UTC'
+
+app.get('/sitemap.xml', function (req, res, next) {
+  var stream=fs.createReadStream('./public/test/test.xml',{flags:'r'});
+    stream.pipe(res);
+})
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))

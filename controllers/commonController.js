@@ -1,6 +1,8 @@
 const Joi = require('joi');
 const formidable = require('formidable')
 const fs  = require('fs')
+const commonServer = require('../server/commonServer')
+
 
 // 上传图片
 module.exports.uploadImage = (req, res) => {
@@ -40,4 +42,33 @@ module.exports.uploadImage = (req, res) => {
       status: 'success'
     })
   })
+}
+
+// 获取筛选向
+module.exports.filter = (req, res) => {
+  const schema = Joi.object({
+    type: Joi.string()
+  })
+  const { error, value } = schema.validate(req.query)
+  if (error) {
+    res.json({
+      msg: error
+    })
+  } else {
+    const area = commonServer.getFilterArea(value)
+    const house = commonServer.getFilterHouse(value)
+    const price = commonServer.getFilterPrice(value)
+    const region = commonServer.getFilterRegion(value)
+    Promise.all([area, house, price, region]).then(results => {
+      res.json({
+        code: 200,
+        data: {
+          area: results[0],
+          house: results[1],
+          price: results[2],
+          region: results[3]
+        }
+      })
+    })
+  }
 }
