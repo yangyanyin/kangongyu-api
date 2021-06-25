@@ -1,7 +1,8 @@
 var createError = require('http-errors')
 var express = require('express')
 var bodyParser = require('body-parser')
-var router = require('./routes/index')
+var cmsRoute = require('./routes/cmsRoute')
+var webRoute = require('./routes/webRoute')
 var app = express();
 const path = require('path')
 const fs = require('fs')
@@ -18,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use(express.static('./public'))
-app.use(router);
+app.use(cmsRoute)
+app.use(webRoute)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
