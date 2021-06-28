@@ -1,7 +1,6 @@
 const SQL = require('../tools/mysql/index')
 
 module.exports.getTraffic = (value) => {
-  console.log(value)
   return new Promise((resolve, reject) => {
     const sql = `SELECT \`name\`, colot FROM traffic WHERE id IN(${value.id})`
     SQL(sql, function (data) {
@@ -54,9 +53,11 @@ module.exports.getHousesList = (value) => {
     }
     const sql = `SELECT 
       hd.id, hd.title, hd.title_tag, hd.images, hd.price, hd.vr_link, hd.unit_type,
-      GROUP_CONCAT(JSON_OBJECT('name',tf.\`name\`, 'color',tf.color)) as traffics
+      GROUP_CONCAT(DISTINCT JSON_OBJECT('name',tf.\`name\`, 'color',tf.color)) as traffics,
+      GROUP_CONCAT(DISTINCT fa.region) as region
       FROM house_detail hd
       INNER JOIN traffic tf ON FIND_IN_SET(tf.id, hd.traffic)
+      INNER JOIN filter_region fa ON FIND_IN_SET(fa.id, hd.filter_region)
       WHERE
       ${where}
       GROUP BY hd.id
@@ -81,11 +82,13 @@ module.exports.getHousesDetail = (value) => {
     let show_key = `hd.title, hd.title_tag, hd.name_tag, hd.coordinate, hd.vr_link, hd.price, 
     hd.estate_type, hd.construction_area, hd.traffic_tips, hd.images, hd.address, hd.introduction,
     GROUP_CONCAT(DISTINCT JSON_OBJECT('id', tf.id, 'name', tf.\`name\`, 'color', tf.color)) as traffics,
-    GROUP_CONCAT(DISTINCT pf.\`name\`) as public_facility
+    GROUP_CONCAT(DISTINCT pf.\`name\`) as public_facility,
+    GROUP_CONCAT(DISTINCT fa.region) as region
     `
     let inner = `INNER JOIN public_facility pf ON FIND_IN_SET(pf.id, hd.apartment_facilities)
-    INNER JOIN traffic tf ON FIND_IN_SET(tf.id, hd.traffic)`
-    if (1 === 2) {
+    INNER JOIN traffic tf ON FIND_IN_SET(tf.id, hd.traffic)
+    INNER JOIN filter_region fa ON FIND_IN_SET(fa.id, hd.filter_region)`
+    if (value.category === 'renting') {
       show_key += `, hd.floor, hd.payment, hd.live, hd.use_water, hd.use_electricity, hd.lease_term, hd.elevator, 
       hd.parking_space, hd.gas, hd.lease_way, hd.house_introduction, hd.look_houses, 
       GROUP_CONCAT(DISTINCT JSON_OBJECT('name', cf.\`name\`, 'image', cf.image)) as supporting_facility`
@@ -100,7 +103,6 @@ module.exports.getHousesDetail = (value) => {
     ${inner}
     WHERE hd.id = ${value.id}
     `
-    console.log(sql ,' sq;')
     SQL(sql, function (data) {
       data.map(item => {
         item.title_tag = item.title_tag ? item.title_tag.split(',') : '',

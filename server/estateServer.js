@@ -24,7 +24,6 @@ module.exports.estateAdd = (value) => {
     VALUES
     (${val})
     `
-    console.log(sql, 'ss')
     SQL(sql, function (data) {
       resolve({
         code: 200,

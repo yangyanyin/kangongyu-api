@@ -111,7 +111,8 @@ module.exports.housesRecommend = (req, res) => {
 // 房屋详情
 module.exports.housesDetail = (req, res) => {
   const schema = Joi.object({
-    id: Joi.number()
+    id: Joi.number(),
+    category: Joi.string().empty('')
   })
   const { error, value } = schema.validate(req.query)
   if (error) {
