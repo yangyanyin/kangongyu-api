@@ -12,6 +12,7 @@ module.exports.index = (req, res) => {
     page: 1,
     page_size: 8
   }
+  
   const news = webAllServer.getNewsList(newsParams)
   newHouseParams.category = 'new-house'
   const newHouse = webAllServer.getHousesList(newHouseParams)
