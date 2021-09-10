@@ -123,3 +123,25 @@ module.exports.getHousesDetail = (value) => {
     })
   })
 }
+
+
+// GROUP_CONCAT 合并
+// DISTINCT 去重
+// JSON_OBJECT 转JSON
+module.exports.testDetail = (value) => {
+  return new Promise((resolve, reject) => {
+    const sql = `SELECT 
+    hd.traffic, 
+    GROUP_CONCAT(DISTINCT JSON_OBJECT('id', tf.id, 'name', tf.\`name\`, 'color', tf.color)) as traffics 
+    FROM house_detail hd
+    INNER JOIN traffic tf ON FIND_IN_SET(tf.id, hd.traffic)
+    WHERE hd.id = ${value.id}`
+    SQL(sql, function (data) {
+      const t = JSON.parse(`[${data[0].traffics}]`)
+      resolve({
+        code: 200,
+        data: t
+      })
+    })
+  })
+}

@@ -126,3 +126,21 @@ module.exports.housesDetail = (req, res) => {
     })
   }
 }
+
+
+module.exports.testDetail = (req, res) => {
+  const schema = Joi.object({
+    id: Joi.number(),
+    category: Joi.string().empty('')
+  })
+  const { error, value } = schema.validate(req.query)
+  if (error) {
+    res.json({
+      msg: error
+    })
+  } else {
+    webAllServer.testDetail(value).then(result => {
+      res.json(result)
+    })
+  }
+}

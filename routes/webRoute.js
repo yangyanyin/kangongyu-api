@@ -23,4 +23,7 @@ router.get('/v1/news/list', webAllController.newsList)
 // 新闻详情
 router.get('/v1/news/detail', webAllController.newsDetail)
 
+// 测试详情获取数据
+router.get('/v1/houses/test-detail', webAllController.testDetail)
+
 module.exports = router

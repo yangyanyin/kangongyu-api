@@ -9,14 +9,18 @@ var pool = mysql.createPool({
 // 数据查询
 const SQL = (sql, Callback) => {
 	pool.getConnection((err, connection) => {
-		connection.query(sql, function (err, result) {
-			if (err) {
-				console.log('[SELECT ERROR] - ', err.message);
-				return;
-			}
-			Callback(result)
-			connection.release();
-		});
+		if (err) {
+			console.log("建立连接失败");
+		} else {
+			connection.query(sql, function (queryErr, result) {
+				if (queryErr) {
+					console.log('查询失败: [SELECT ERROR] - ', queryErr.message);
+					return;
+				}
+				Callback(result)
+				connection.release()
+			})
+		}
 	})
 }
 
