@@ -124,7 +124,6 @@ module.exports.getHousesDetail = (value) => {
   })
 }
 
-
 // GROUP_CONCAT 合并
 // DISTINCT 去重
 // JSON_OBJECT 转JSON
